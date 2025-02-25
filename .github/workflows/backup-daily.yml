@@ -1,0 +1,272 @@
+name: Backup Daily
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  backup-daily:
+    name: Backup ghcr.io/${{ matrix.repository }}:${{ matrix.tag }} to ghcr.io/${{ github.repository }}:${{ matrix.tag }}-daily
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-alma-errata
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-alma-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-alpine-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-alpine-secdb
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-amazon
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-arch
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-cargo-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-eol
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-epss
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-freebsd
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-kev
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-mitre-v5
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-nvd-api-cve
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-oracle
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-redhat-csaf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-redhat-csaf-rhel
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-redhat-ovalv1
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-redhat-ovalv2
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-redhat-ovalv2-rhel
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-redhat-vex
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-redhat-vex-rhel
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-extracted-rocky-errata
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-alma-errata
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-alma-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-alma-oval
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-alpine-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-alpine-secdb
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-amazon
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-android-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-arch
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-attack
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-bitnami-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-capec
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-cargo-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-cargo-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-chainguard-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-composer-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-composer-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-composer-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-conan-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-cwe
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-debian-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-debian-oval
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-debian-security-tracker-api
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-debian-security-tracker-salsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-epss
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-erlang-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-erlang-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-exploit-exploitdb
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-exploit-github
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-exploit-inthewild
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-exploit-trickest
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-fedora
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-fortinet
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-fortinet-cvrf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-freebsd
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-gentoo
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-ghactions-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-git-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-golang-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-golang-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-golang-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-haskell-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-jvn-feed-detail
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-jvn-feed-product
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-jvn-feed-rss
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-kev
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-linux-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-maven-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-maven-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-maven-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-mitre-cvrf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-mitre-v4
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-mitre-v5
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-msf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-netbsd
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-npm-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-npm-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-npm-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nuget-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nuget-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nuget-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nvd-api-cpe
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nvd-api-cpematch
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nvd-api-cve
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nvd-feed-cpe
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nvd-feed-cpematch
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-nvd-feed-cve
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-oracle
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-oss-fuzz-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-pip-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-pip-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-pip-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-pub-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-pub-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-csaf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-cve
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-cvrf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-ovalv1
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-ovalv2
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-repository-to-cpe
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-redhat-vex
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-rocky-errata
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-rocky-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-r-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-rubygems-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-rubygems-glsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-rubygems-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-snort
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-suse-csaf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-suse-csaf-vex
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-suse-cvrf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-suse-cvrf-cve
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-suse-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-suse-oval
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-swift-ghsa
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-swift-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-ubuntu-cve-tracker
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-ubuntu-osv
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-ubuntu-oval
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-vulncheck-kev
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-windows-bulletin
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-windows-cvrf
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-windows-msuc
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-windows-wsusscn2
+          - repository: vulsio/vuls-data-db
+            tag: vuls-data-raw-wolfi-osv
+    uses: ./.github/workflows/backup.yml
+    with:
+      repository: ${{ matrix.repository }}
+      tag: ${{ matrix.tag }}
+      tag-suffix: daily
